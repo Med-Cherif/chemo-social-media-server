@@ -1,0 +1,6 @@
+services:
+  chemo-server:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: prod

@@ -1,0 +1,119 @@
+scalar Upload
+
+type File {
+  _id: ID
+  originalName: String
+  name: String
+  url: String
+  size: Float
+}
+
+type Mutation {
+  uploadFile(file: Upload): String
+  createPost(data: PostInput): Post
+  updatePost(id: ID, content: String): Post
+  deletePost(id: ID): Boolean
+  likePost(data: LikePostInput): PostReaction
+  dislikePost(data: LikePostInput): PostReaction
+  removeLike(data: LikePostInput): PostReaction
+  createComment(data: CreateCommentInput): Comment
+  deleteComment(id: ID): Boolean
+  register(data: RegisterInput): AuthSuccessResponse
+  login(data: LoginInput): AuthSuccessResponse
+  updatePassword(password: String!, passwordConfirmation: String!): AuthSuccessResponse
+}
+
+type PostCreator {
+  _id: String
+  username: String
+  name: String
+}
+
+type Post {
+  _id: String
+  creator: PostCreator
+  content: String
+  media: File
+  likes: Int
+  dislikes: Int
+  comments: Int
+  userReaction: String
+}
+
+input PostInput {
+  media: Upload
+  content: String
+}
+
+input CreateCommentInput {
+  postID: ID
+  content: String
+}
+
+type Comment {
+  _id: ID
+  post: ID
+  content: String
+  creator: PostCreator
+}
+
+input LikePostInput {
+  postID: String
+}
+
+type PostReaction {
+  _id: ID
+  user: PostCreator
+  type: String
+  post: ID
+}
+
+type GroupedPostReactions {
+  likes: [PostReaction!]!
+  dislikes: [PostReaction!]!
+}
+
+type Query {
+  getProfilePosts: [Post!]!
+  getPostReactions(id: ID): GroupedPostReactions!
+  getPostComments(id: ID): [Comment!]!
+  message: String
+}
+
+type User {
+  _id: String
+  username: String
+  name: String
+  email: String
+  gender: Gender
+}
+
+type AuthSuccessResponse {
+  accessToken: String!
+  user: User
+}
+
+enum Gender {
+  MALE
+  FEMALE
+  PREFER_NOT_TO_SAY
+}
+
+input RegisterInput {
+  username: String!
+  name: String!
+  email: String!
+  password: String!
+  passwordConfirmation: String!
+  gender: Gender!
+}
+
+input LoginInput {
+  field: String!
+  password: String!
+}
+
+schema {
+  query: Query
+  mutation: Mutation
+}

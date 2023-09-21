@@ -1,0 +1,15 @@
+services:
+  chemo-server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: chemo-server-image
+    container_name: chemo-server-container
+    ports:
+      - $PORT:$PORT
+    volumes:
+      - ./:app:ro
+      - ./app/node_modules
+    environment:
+      PORT=$PORT
+      # - name=value
