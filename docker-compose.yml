@@ -12,4 +12,4 @@ services:
       - ./app/node_modules
     environment:
       PORT=$PORT
-      # - name=value
+      # - name=values
